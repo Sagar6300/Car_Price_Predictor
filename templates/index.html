@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Car Price Predictor</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        /* Style for the main description text */
+        #main-description {
+            font-size: 1.2rem; /* Slightly larger font */
+            font-weight: 500; /* Medium thickness */
+            color: #333; /* Dark gray for clarity */
+            text-align: center; /* Center alignment */
+            margin-bottom: 20px; /* Spacing below */
+        }
+
+        /* Style for labels to Arial with reduced boldness */
+        label {
+            font-family: Arial, sans-serif; /* Arial font */
+            font-weight: 600; /* Slightly less bold */
+            font-size: 1.1rem; /* Slightly larger font size */
+            color: #333; /* Slightly dark gray for consistency */
+        }
+
+        /* Adjust dropdown spacing */
+        select, input {
+            margin-bottom: 15px;
+        }
+
+        /* Fix for dropdown to open downward */
+        .dropdown-menu {
+            top: auto !important;
+            bottom: auto !important;
+        }
+    </style>
+</head>
+<body class="bg-dark">
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header text-center">
+            <h1>Welcome to Car Price Predictor</h1>
+        </div>
+        <div class="card-body">
+            <!-- Main description moved outside the header -->
+            <p id="main-description">Predict the price of a car you want to sell by filling in the details below:</p>
+
+            <form method="post">
+                <!-- Company Dropdown -->
+                <div class="form-group">
+                    <label for="company">Select the company:</label>
+                    <select class="form-control" id="company" name="company" onchange="loadCarModels()">
+                        <option value="" selected disabled>Select Company</option>
+                        {% for company in companies %}
+                        <option value="{{ company }}">{{ company }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!-- Car Models Dropdown -->
+                <div class="form-group">
+                    <label for="car_models">Select the model:</label>
+                    <select class="form-control" id="car_models" name="car_models">
+                        <option value="" selected disabled>Select Model</option>
+                    </select>
+                </div>
+                <!-- Year Dropdown -->
+                <div class="form-group">
+                    <label for="year">Select Year of Purchase:</label>
+                    <select class="form-control" id="year" name="year">
+                        {% for year in years %}
+                        <option value="{{ year }}">{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!-- Fuel Type Dropdown -->
+                <div class="form-group">
+                    <label for="fuel_type">Select the Fuel Type:</label>
+                    <select class="form-control" id="fuel_type" name="fuel_type">
+                        {% for fuel in fuel_types %}
+                        <option value="{{ fuel }}">{{ fuel }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!-- Kilometres Input -->
+                <div class="form-group">
+                    <label for="kilo_driven">Enter Kilometres Driven:</label>
+                    <input type="text" class="form-control" id="kilo_driven" name="kilo_driven" placeholder="Enter kilometres driven">
+                </div>
+                <!-- Predict Button -->
+                <button type="button" class="btn btn-primary btn-block" onclick="sendData()">Predict Price</button>
+            </form>
+            <!-- Prediction Result -->
+            <div class="text-center mt-3">
+                <h4 id="prediction"></h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Inject car models JSON safely
+    const carModelsByCompany = JSON.parse(`{{ car_models_by_company | tojson | safe }}`);
+
+    // Load car models dynamically
+    function loadCarModels() {
+        const company = document.getElementById("company").value;
+        const carModelsDropdown = document.getElementById("car_models");
+
+        // Clear existing options
+        carModelsDropdown.innerHTML = "<option value='' selected disabled>Select Model</option>";
+
+        // Add car models based on selected company
+        if (company in carModelsByCompany) {
+            carModelsByCompany[company].forEach(model => {
+                const option = document.createElement("option");
+                option.value = model;
+                option.textContent = model;
+                carModelsDropdown.appendChild(option);
+            });
+        }
+    }
+
+    // Send form data to the server
+    function sendData() {
+        const formData = new FormData(document.querySelector("form"));
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/predict", true);
+        document.getElementById("prediction").innerText = "Predicting Price...";
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                document.getElementById("prediction").innerText = "Prediction: ₹ " + xhr.responseText;
+            }
+        };
+        xhr.send(formData);
+    }
+</script>
+
+</body>
+</html>
