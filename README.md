@@ -1,9 +1,7 @@
 # Car Price Predictor
-
+This project is a **Car Price Prediction Application** that estimates the resale value of a car based on various features such as the car's company, model, year of purchase, fuel type, and kilometers driven.
 ## View the live website
 Click the link to view the website (https://car-price-predictor-es3e.onrender.com/)
-
-This project is a **Car Price Prediction Application** that estimates the resale value of a car based on various features such as the car's company, model, year of purchase, fuel type, and kilometers driven.
 
 ## Features
 
@@ -18,16 +16,18 @@ This project is a **Car Price Prediction Application** that estimates the resale
 - **Year of Purchase**: Enter the year the car was purchased.
 - **Fuel Type**: Select the type of fuel the car uses (e.g., Petrol, Diesel).
 - **Kilometers Driven**: Input the total kilometers the car has been driven.
+---
+## Screenshots
 
-## Example Screenshot
-
-## User Inputs
+### Application Interface
 
 ![image](https://github.com/user-attachments/assets/5c1874b7-1e98-4136-aaec-d32ef79c1475)
 
-## Output
+### Prediction Result
 
 ![image](https://github.com/user-attachments/assets/30507dd5-c61c-43e2-9585-aebb28092d22)
+
+---
 
 ## Technologies Used
 
@@ -36,13 +36,11 @@ This project is a **Car Price Prediction Application** that estimates the resale
 - **Machine Learning**: Python (Jupyter Notebook), Scikit-learn
 - **Deployment**: Render
 
----
 
 ## Dataset
 
 The model is trained on a dataset containing various car features and their corresponding resale prices. The dataset has been cleaned and preprocessed for optimal performance.
 
----
 
 ## Model
 
